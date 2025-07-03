@@ -1,14 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_app/firebase_utils.dart';
 import 'package:to_do_app/list_tab/add_list_item.dart';
+import 'package:to_do_app/model/task.dart';
+import 'package:to_do_app/provider/list_provider.dart';
 
 import '../app_color.dart';
 
-class ListTab extends StatelessWidget {
-  const ListTab({super.key});
+class ListTab extends StatefulWidget {
+   ListTab({super.key});
+
+  @override
+  State<ListTab> createState() => _ListTabState();
+}
+
+class _ListTabState extends State<ListTab> {
+
 
   @override
   Widget build(BuildContext context) {
+    var listProvider=Provider.of<ListProvider>(context);
+    if(listProvider.listTasks.isEmpty){
+    listProvider.getAllTasks();
+    }
     return Column(
     children: [
       EasyDateTimeLine(
@@ -108,15 +124,21 @@ class ListTab extends StatelessWidget {
       ),
       Expanded(
         child: ListView.builder(
-            itemBuilder: (context,int)
+            itemBuilder: (context,index)
         {
-          return AddListItem();
+          return AddListItem(task: listProvider.listTasks[index]);
         },
-          itemCount: 10,
+          itemCount: listProvider.listTasks.length,
 
         ),
       )
     ],
     );
   }
+
+
+
+
 }
+
+

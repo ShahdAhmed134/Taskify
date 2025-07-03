@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do_app/app_color.dart';
+import 'package:to_do_app/firebase_utils.dart';
+import 'package:to_do_app/model/task.dart';
+import 'package:to_do_app/provider/list_provider.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({super.key});
@@ -8,10 +12,14 @@ class AddTask extends StatefulWidget {
   State<AddTask> createState() => _AddTaskState();
 }
 var selectedDate =DateTime.now();
+String title='';
+String desc='';
+late ListProvider listProvider;
 var formKey= GlobalKey<FormState>();
 class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
+    listProvider=Provider.of<ListProvider>(context);
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(20),
@@ -30,6 +38,9 @@ class _AddTaskState extends State<AddTask> {
                child:Column(
                  children: [
                    TextFormField(
+                     onChanged: (text){
+                       title=text;
+                     },
                      validator: (value){
                        if(value==null || value.isEmpty){
                          return 'Please enter title';}
@@ -61,6 +72,9 @@ class _AddTaskState extends State<AddTask> {
                      height: MediaQuery.of(context).size.height*0.02,
                    ),
                    TextFormField(
+                     onChanged: (text){
+                       desc=text;
+                     },
                      validator: (value){
                        if(value==null || value.isEmpty){
                          return 'Please enter description';}
@@ -106,6 +120,7 @@ class _AddTaskState extends State<AddTask> {
            ElevatedButton(
                onPressed: (){
                  addTaskBottomSheet();
+
                },
                child: Text('Add',
                style: TextStyle(
@@ -138,7 +153,15 @@ class _AddTaskState extends State<AddTask> {
   }
 
   void addTaskBottomSheet() {
+    Task task=Task(title: title, desc: desc, time: selectedDate);
     if(formKey.currentState!.validate())
-      print('valid');
+      FirebaseUtils.addTaskToFireStore(task).timeout(
+        Duration(seconds: 2),
+        onTimeout: (){
+          print('added task successfully');
+          listProvider.getAllTasks();
+          Navigator.pop(context);
+        }
+      );
   }
 }
