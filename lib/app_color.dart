@@ -12,5 +12,6 @@ class AppColors{
   static const Color backgroundLight=Color(0xffDFECDB);
   static const Color backgroundDark=Color(0xff060E1E);
   static const Color grayColor=Color(0xffC8C9CB);
+  static const Color blackTime=Color(0xff363636);
 
 }

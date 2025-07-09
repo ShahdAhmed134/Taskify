@@ -115,8 +115,12 @@ class _AddTaskState extends State<AddTask> {
            TextButton(
                onPressed: (){
                  ShowCalender();
-               }, child:Text('${selectedDate.day}/ ${selectedDate.month}/${selectedDate.year}'
-             , style: Theme.of(context).textTheme.labelLarge,)),
+               }, child:
+           Text(
+             '${selectedDate.day}/${selectedDate.month}/${selectedDate.year} ',
+             style: Theme.of(context).textTheme.labelLarge,
+           ),
+           ),
            ElevatedButton(
                onPressed: (){
                  addTaskBottomSheet();
@@ -141,19 +145,29 @@ class _AddTaskState extends State<AddTask> {
     var chooseDate = await showDatePicker(
         context: context,
         initialDate:  DateTime.now(),
-        firstDate: DateTime.now(), 
+        firstDate: DateTime.now(),
         lastDate: DateTime.now().add(Duration(days: 365))
     );
     if(chooseDate != null) {
       selectedDate = chooseDate;
     }
+
     setState(() {
 
     });
   }
 
   void addTaskBottomSheet() {
-    Task task=Task(title: title, desc: desc, time: selectedDate);
+    DateTime now = DateTime.now();
+    DateTime fullDateTime = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      now.hour,
+      now.minute,
+      now.second,
+    );
+    Task task=Task(title: title, desc: desc, time: fullDateTime);
     if(formKey.currentState!.validate())
       FirebaseUtils.addTaskToFireStore(task).timeout(
         Duration(seconds: 2),

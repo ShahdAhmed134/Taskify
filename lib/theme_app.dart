@@ -7,7 +7,10 @@ class ThemeApp{
   static final ThemeData lightTheme = ThemeData(
     primaryColor: AppColors.primaryColor,
       appBarTheme: AppBarTheme(
-          color: AppColors.primaryColor
+          color: AppColors.primaryColor,
+       iconTheme: IconThemeData(
+         color: AppColors.whiteColor,
+       )
       ),
       scaffoldBackgroundColor: AppColors.backgroundLight,
 
@@ -36,6 +39,7 @@ class ThemeApp{
         ),
 
       ),
+
       textTheme: TextTheme(
           titleLarge: GoogleFonts.poppins(
               color: AppColors.whiteColor,
@@ -57,7 +61,11 @@ class ThemeApp{
             fontSize: 15,
             fontWeight: FontWeight.bold
         ),
-
+        labelSmall:  GoogleFonts.roboto(
+            color: AppColors.blackTime,
+            fontSize: 12,
+            fontWeight: FontWeight.w400
+        ),
       )
   );
   static final ThemeData darkTheme = ThemeData(

@@ -29,19 +29,22 @@ class _ListTabState extends State<ListTab> {
     children: [
       EasyDateTimeLine(
         //locale: provider.AppLanguage,
-        initialDate:  DateTime.now(),
+        initialDate: listProvider.selectedDate,
         onDateChange: (selectedDate) {
+          listProvider.changeDate(selectedDate);
         //  providerList.changeSelectDate(selectedDate,authUserProvider.currentUser!.id!);
         },
-        headerProps: EasyHeaderProps(
+        headerProps: const EasyHeaderProps(
+
           // padding: EdgeInsets.fromLTRB(15, 5, 5, 15),
-         // showMonthPicker: false,
-           monthPickerType: MonthPickerType.switcher,
+          //showMonthPicker: false,
+          monthPickerType: MonthPickerType.switcher,
           monthStyle: TextStyle(
             color: AppColors.whiteColor,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
+
           selectedDateStyle: TextStyle(
             color: AppColors.whiteColor,
             fontWeight: FontWeight.bold,

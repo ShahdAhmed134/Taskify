@@ -19,6 +19,24 @@ class FirebaseUtils{
     return docRef.set(task);
 
   }
+
+  static Future<List<Task>> getFilteredAndSortedTasks(DateTime date) async {
+    DateTime startOfDay = DateTime(date.year, date.month, date.day);
+    DateTime endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59);
+
+    QuerySnapshot<Task> querySnapshot = await getTaskCollection()
+        .where('dateTime', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+        .where('dateTime', isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
+        .orderBy('dateTime', descending: true) // الأحدث فوق
+        .get();
+
+    return querySnapshot.docs.map((doc) => doc.data()).toList();
+  }
+
+  static Future<void> deletedTask(Task task){
+  return  getTaskCollection().doc(task.id).delete();
+  }
+
 /*
   static void getAllTasks(var taskList )async{
       QuerySnapshot<Task> querySnapshot = await getTaskCollection().get();
