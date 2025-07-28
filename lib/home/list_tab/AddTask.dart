@@ -3,7 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:to_do_app/app_color.dart';
 import 'package:to_do_app/firebase_utils.dart';
 import 'package:to_do_app/model/task.dart';
+import 'package:to_do_app/provider/app_config_provider.dart';
 import 'package:to_do_app/provider/list_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../../provider/user_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({super.key});
@@ -20,15 +24,21 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     listProvider=Provider.of<ListProvider>(context);
+    var appProvider =Provider.of<AppProvider>(context);
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(20),
        child: Column(
          crossAxisAlignment: CrossAxisAlignment.stretch,
          children: [
-           Text('Add New Task',
+           Text(AppLocalizations.of(context)!.newTask,
            textAlign: TextAlign.center,
-             style: Theme.of(context).textTheme.titleSmall,
+             style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                 color: appProvider.modeApp==ThemeMode.light ?
+                 AppColors.blackColor
+                     :
+                 AppColors.whiteColor
+             ),
            ),
            SizedBox(
              height: MediaQuery.of(context).size.height*0.02,
@@ -48,10 +58,13 @@ class _AddTaskState extends State<AddTask> {
                        return null;
                      },
                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                         color: AppColors.blackColor
+                         color: appProvider.modeApp==ThemeMode.light ?
+                         AppColors.blackColor
+                             :
+                         AppColors.whiteColor
                      ),
                      decoration: InputDecoration(
-                       hintText: 'enter your task',
+                       hintText: AppLocalizations.of(context)!.enterTask,
                        hintStyle:  Theme.of(context).textTheme.labelMedium,
                        focusedBorder: UnderlineInputBorder(
                          borderSide: BorderSide(
@@ -82,10 +95,13 @@ class _AddTaskState extends State<AddTask> {
                        return null;
                      },
                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                       color: AppColors.blackColor
+                       color:  appProvider.modeApp==ThemeMode.light ?
+                     AppColors.blackColor
+                         :
+                         AppColors.whiteColor
                      ),
                      decoration: InputDecoration(
-                       hintText: 'enter your description',
+                       hintText: AppLocalizations.of(context)!.enterDesc,
                        hintStyle:  Theme.of(context).textTheme.labelMedium,
                        focusedBorder: UnderlineInputBorder(
                          borderSide: BorderSide(
@@ -108,9 +124,14 @@ class _AddTaskState extends State<AddTask> {
 
                  ],
                ) ),
-           Text('Select Date',
+           Text(AppLocalizations.of(context)!.time,
              //textAlign: TextAlign.start,
-             style: Theme.of(context).textTheme.labelLarge,
+             style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                 color: appProvider.modeApp==ThemeMode.light ?
+                 AppColors.blackColor
+                     :
+                 AppColors.whiteColor
+             ),
            ),
            TextButton(
                onPressed: (){
@@ -118,7 +139,12 @@ class _AddTaskState extends State<AddTask> {
                }, child:
            Text(
              '${selectedDate.day}/${selectedDate.month}/${selectedDate.year} ',
-             style: Theme.of(context).textTheme.labelLarge,
+             style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                 color: appProvider.modeApp==ThemeMode.light ?
+                 AppColors.blackColor
+                     :
+                 AppColors.whiteColor
+             ),
            ),
            ),
            ElevatedButton(
@@ -126,7 +152,7 @@ class _AddTaskState extends State<AddTask> {
                  addTaskBottomSheet();
 
                },
-               child: Text('Add',
+               child: Text(AppLocalizations.of(context)!.add,
                style: TextStyle(
                  color: AppColors.whiteColor,
                  fontSize: 20
@@ -146,7 +172,7 @@ class _AddTaskState extends State<AddTask> {
         context: context,
         initialDate:  DateTime.now(),
         firstDate: DateTime.now(),
-        lastDate: DateTime.now().add(Duration(days: 365))
+        lastDate: DateTime.now().add(Duration(days: 365)),
     );
     if(chooseDate != null) {
       selectedDate = chooseDate;
@@ -167,15 +193,45 @@ class _AddTaskState extends State<AddTask> {
       now.minute,
       now.second,
     );
-    Task task=Task(title: title, desc: desc, time: fullDateTime);
-    if(formKey.currentState!.validate())
-      FirebaseUtils.addTaskToFireStore(task).timeout(
-        Duration(seconds: 2),
-        onTimeout: (){
-          print('added task successfully');
-          listProvider.getAllTasks();
-          Navigator.pop(context);
-        }
+    Task task = Task(title: title, desc: desc, time: fullDateTime);
+    if (formKey.currentState!.validate()){
+      var authProvider=Provider.of<UserAuthProvider>(context,listen: false);
+      FirebaseUtils.addTaskToFireStore(task,authProvider.currentUser!.id!)
+          .then((value){
+        ///print('added task successfully');
+        listProvider.getAllTasks(authProvider.currentUser!.id!);
+        Fluttertoast.showToast(
+            msg:AppLocalizations.of(context)!.msgSuccess,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: AppColors.primaryColor,
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+        Navigator.pop(context);
+
+      })
+          .timeout(
+          Duration(seconds: 1),
+          onTimeout: () {
+          ///  print('added task successfully');
+            listProvider.getAllTasks(authProvider.currentUser!.id!);
+            Navigator.pop(context);
+            Fluttertoast.showToast(
+                msg:AppLocalizations.of(context)!.msgSuccess,
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: AppColors.primaryColor,
+                textColor: Colors.white,
+                fontSize: 16.0
+            );
+          }
       );
+
   }
+  }
+
+
 }

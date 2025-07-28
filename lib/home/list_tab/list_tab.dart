@@ -1,13 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_app/firebase_utils.dart';
-import 'package:to_do_app/list_tab/add_list_item.dart';
-import 'package:to_do_app/model/task.dart';
+import 'package:to_do_app/home/list_tab/add_list_item.dart';
+import 'package:to_do_app/provider/app_config_provider.dart';
 import 'package:to_do_app/provider/list_provider.dart';
+import '../../app_color.dart';
+import '../../provider/user_provider.dart';
 
-import '../app_color.dart';
 
 class ListTab extends StatefulWidget {
    ListTab({super.key});
@@ -22,35 +21,45 @@ class _ListTabState extends State<ListTab> {
   @override
   Widget build(BuildContext context) {
     var listProvider=Provider.of<ListProvider>(context);
+    var authProvider=Provider.of<UserAuthProvider>(context);
+    var appProvider =Provider.of<AppProvider>(context);
     if(listProvider.listTasks.isEmpty){
-    listProvider.getAllTasks();
+    listProvider.getAllTasks(authProvider.currentUser?.id ?? "no-id");
     }
     return Column(
     children: [
       EasyDateTimeLine(
-        //locale: provider.AppLanguage,
+        locale: appProvider.language,
         initialDate: listProvider.selectedDate,
         onDateChange: (selectedDate) {
-          listProvider.changeDate(selectedDate);
-        //  providerList.changeSelectDate(selectedDate,authUserProvider.currentUser!.id!);
+          listProvider.changeDate(selectedDate,authProvider.currentUser!.id!);
         },
-        headerProps: const EasyHeaderProps(
-
+        headerProps:  EasyHeaderProps(
           // padding: EdgeInsets.fromLTRB(15, 5, 5, 15),
           //showMonthPicker: false,
           monthPickerType: MonthPickerType.switcher,
           monthStyle: TextStyle(
-            color: AppColors.whiteColor,
+
+            color:appProvider.modeApp==ThemeMode.light ?
+          AppColors.whiteColor
+            :
+            AppColors.blackColor,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
 
           selectedDateStyle: TextStyle(
-            color: AppColors.whiteColor,
+            color:   appProvider.modeApp==ThemeMode.light ?
+          AppColors.whiteColor
+            :
+            AppColors.blackColor,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
-          dateFormatter: DateFormatter.fullDateDayAsStrMY(),
+          dateFormatter: appProvider.language == 'ar'
+              ? DateFormatter.custom('EEE، d MMMM yyyy')
+              : DateFormatter.fullDateDayAsStrMY(),
+
         ),
         dayProps: EasyDayProps(
           borderColor: AppColors.blackColor,
@@ -58,43 +67,51 @@ class _ListTabState extends State<ListTab> {
           width: MediaQuery.of(context).size.width * 0.17,
           todayStyle: DayStyle(
             decoration: BoxDecoration(
-              color:  Colors.white,
+              color:appProvider.modeApp==ThemeMode.light ?
+            AppColors.whiteColor
+              :
+              AppColors.blackColor,
               border: Border.all(color: AppColors.primaryColor, width: 2),
               borderRadius: BorderRadius.circular(10),
             ),
             dayStrStyle: TextStyle(
               fontSize: 12.0,
               fontWeight: FontWeight.bold,
-              color:
-              Colors.black,
+              color:AppColors.primaryColor
               // Change the text color if needed
             ),
             dayNumStyle: TextStyle(
-                color:
-               Colors.black,
+                color:AppColors.primaryColor,
                 fontWeight:
                 FontWeight.bold // Change the text color if needed
             ),
           ),
-          todayHighlightStyle: TodayHighlightStyle.withBorder,
+        //  todayHighlightStyle: TodayHighlightStyle.withBorder,
           todayHighlightColor: AppColors.primaryColor,
-          //   todayHighlightStyle: TodayHighlightStyle.withBackground,
 
           inactiveDayStyle: DayStyle(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color:  Colors.white,
+              color: appProvider.modeApp==ThemeMode.light ?
+            AppColors.whiteColor
+              :
+              AppColors.blackColor,
             ),
             dayStrStyle: TextStyle(
+              locale: Locale(appProvider.language),
               fontSize: 12.0,
               fontWeight: FontWeight.bold,
-              color:
-            Colors.black,
+              color:appProvider.modeApp==ThemeMode.light ?
+            AppColors.blackColor
+                :
+                AppColors.whiteColor,
               // Change the text color if needed
             ),
-            dayNumStyle: TextStyle(
-                color:
-                Colors.black,
+            dayNumStyle: TextStyle( locale: Locale(appProvider.language),
+                color:appProvider.modeApp==ThemeMode.light ?
+                AppColors.blackColor
+                    :
+                AppColors.whiteColor,
                 fontWeight:
                 FontWeight.bold // Change the text color if needed
             ),
@@ -104,17 +121,25 @@ class _ListTabState extends State<ListTab> {
             dayNumStyle: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
-                color: AppColors.primaryColor),
+                color:appProvider.modeApp==ThemeMode.light ?
+                AppColors.blackColor
+                    :
+                AppColors.whiteColor,),
             dayStrStyle: TextStyle(
                 fontSize: 13.0,
                 fontWeight: FontWeight.bold,
-                color: AppColors.primaryColor),
+                color: appProvider.modeApp==ThemeMode.light ?
+                AppColors.blackColor
+                    :
+                AppColors.whiteColor,),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(8)),
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xffffffff), Color(0xffffffff)],
+                colors: appProvider.modeApp==ThemeMode.light ?
+                         [Color(0xffffffff), Color(0xffffffff),Color(0xff5D9CEC)]:
+                [Color(0xff141922), Color(0xff262b33),Color(0xd25d9cec) ]
               ),
             ),
           ),
