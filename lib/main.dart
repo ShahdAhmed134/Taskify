@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/auth/register/register_screen.dart';
-import 'package:to_do_app/home_screen.dart';
+import 'package:to_do_app/home/home_screen.dart';
 import 'package:to_do_app/provider/app_config_provider.dart';
 import 'package:to_do_app/provider/list_provider.dart';
 import 'package:to_do_app/provider/user_provider.dart';

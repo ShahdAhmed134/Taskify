@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/app_color.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:to_do_app/home/setting_tab/theme_bottom_sheet.dart';
 import 'package:to_do_app/provider/app_config_provider.dart';
-import 'package:to_do_app/setting_tab/language_bottom_sheet.dart';
-import 'package:to_do_app/setting_tab/theme_bottom_sheet.dart';
+
+import 'language_bottom_sheet.dart';
+
 
 class SettingTab extends StatelessWidget {
 

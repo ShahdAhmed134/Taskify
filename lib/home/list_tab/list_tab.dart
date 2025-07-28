@@ -1,15 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_app/firebase_utils.dart';
-import 'package:to_do_app/list_tab/add_list_item.dart';
-import 'package:to_do_app/model/task.dart';
+import 'package:to_do_app/home/list_tab/add_list_item.dart';
 import 'package:to_do_app/provider/app_config_provider.dart';
 import 'package:to_do_app/provider/list_provider.dart';
+import '../../app_color.dart';
+import '../../provider/user_provider.dart';
 
-import '../app_color.dart';
-import '../provider/user_provider.dart';
 
 class ListTab extends StatefulWidget {
    ListTab({super.key});

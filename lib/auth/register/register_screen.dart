@@ -6,7 +6,7 @@ import 'package:to_do_app/auth/custom_text_form_field.dart';
 import 'package:to_do_app/auth/login/login_screen.dart';
 import 'package:to_do_app/dialog_utils.dart';
 import 'package:to_do_app/firebase_utils.dart';
-import 'package:to_do_app/home_screen.dart';
+import 'package:to_do_app/home/home_screen.dart';
 import 'package:to_do_app/model/user.dart';
 import 'package:to_do_app/provider/user_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

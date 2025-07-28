@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/app_color.dart';
 import 'package:to_do_app/auth/login/login_screen.dart';
-import 'package:to_do_app/list_tab/list_tab.dart';
+import 'package:to_do_app/home/setting_tab/setting_tab.dart';
 import 'package:to_do_app/provider/app_config_provider.dart';
 import 'package:to_do_app/provider/list_provider.dart';
 import 'package:to_do_app/provider/user_provider.dart';
-import 'package:to_do_app/setting_tab/setting_tab.dart';
-import 'package:to_do_app/show_info.dart';
-import 'list_tab/AddTask.dart';
+import 'package:to_do_app/home/show_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'list_tab/AddTask.dart';
+import 'list_tab/list_tab.dart';
 
 class HomeScreen extends StatefulWidget {
 static const String routeName ='home';

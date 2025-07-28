@@ -8,7 +8,7 @@ import 'package:to_do_app/dialog_utils.dart';
 import 'package:to_do_app/firebase_utils.dart';
 import 'package:to_do_app/provider/app_config_provider.dart';
 
-import '../../home_screen.dart';
+import '../../home/home_screen.dart';
 import '../../provider/user_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
