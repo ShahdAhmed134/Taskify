@@ -9,8 +9,8 @@ class ListProvider extends ChangeNotifier{
   List<Task> listTasks=[];
   DateTime selectedDate=DateTime.now();
 
-  void getAllTasks() async{
-    listTasks = await FirebaseUtils.getFilteredAndSortedTasks(selectedDate);
+  void getAllTasks(String uId) async{
+    listTasks = await FirebaseUtils.getFilteredAndSortedTasks(selectedDate,uId);
 
 /*    /// filter all tasks
     listTasks= listTasks.where((task){
@@ -26,14 +26,15 @@ class ListProvider extends ChangeNotifier{
     listTasks.sort((Task task1 ,Task task2 ){
       return task2.time.compareTo(task1.time);
     });*/
-   for (var task in listTasks) {
+
+ /*  for (var task in listTasks) {
       print('${task.title}: ${task.time}');
-    }
+    }*/
 notifyListeners();
   }
-  void changeDate(DateTime newSelected){
+  void changeDate(DateTime newSelected,String uId){
     selectedDate=newSelected;
-    getAllTasks();
+    getAllTasks(uId);
     //notifyListeners();
   }
 }
