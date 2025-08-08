@@ -25,10 +25,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool obscurePass=true;
   bool obscureConf=true;
-  TextEditingController nameController =TextEditingController(text: 'shahd');
-  TextEditingController emailController =TextEditingController(text: 'shahd@gmail.com');
-  TextEditingController passwordController =TextEditingController(text: '123456');
-  TextEditingController confirmController =TextEditingController(text: '123456');
+  TextEditingController nameController =TextEditingController();
+  TextEditingController emailController =TextEditingController();
+  TextEditingController passwordController =TextEditingController();
+  TextEditingController confirmController =TextEditingController();
   @override
   Widget build(BuildContext context) {
     var appProvider =Provider.of<AppProvider>(context);
@@ -57,14 +57,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
           SingleChildScrollView(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).size.height * 0.02,
-              ),
+
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10),
-
               width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.8,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                   color : appProvider.modeApp==ThemeMode.light ?
@@ -233,6 +229,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               )
                           ),),
                         ),
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.08,),
 
                       ],
                     ),

@@ -23,8 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> formState=GlobalKey();
 
   bool obscurePass=true;
-  TextEditingController emailController =TextEditingController(text: 'shahd@gmail.com');
-  TextEditingController passwordController =TextEditingController(text: '123456');
+  TextEditingController emailController =TextEditingController();
+  TextEditingController passwordController =TextEditingController();
   @override
   Widget build(BuildContext context) {
     var appProvider =Provider.of<AppProvider>(context);
