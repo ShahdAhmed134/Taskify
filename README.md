@@ -1,4 +1,4 @@
-# to_do_app
+# taskify_app
 
 A new Flutter project.
 
