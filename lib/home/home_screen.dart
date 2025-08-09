@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         title: Text(
           selectedIndex==0?
-         'To Do List':
+         'TASKIFY':
           AppLocalizations.of(context)!.setting,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
               color: appProvider.modeApp==ThemeMode.light ?
